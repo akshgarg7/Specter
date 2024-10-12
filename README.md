@@ -60,3 +60,8 @@ The goal is to develop a tool that helps lawyers prepare for negotiations by sim
 
 ### Value Proposition:
 The primary value proposition is to **“Enable anyone to prepare against expert negotiator chatbots trained on past case precedent.”** This tool empowers lawyers to practice and refine their negotiation strategies by interacting with an AI-powered opponent that has been trained on relevant case law and hypothetical trajectories. It provides a safe and controlled environment for legal professionals to prepare for high-stakes negotiations with confidence.
+
+## Credits
+- Frontend based on Harvey.ai 
+- Voice API based on OpenAI's ChatGPT Voice Endpoint
+- Voice API hosted on outspeed. 
