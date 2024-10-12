@@ -4,8 +4,8 @@ from openai import OpenAI
 import os
 
 print(os.getenv("OPENAI_API_KEY"))
-if os.getenv("OPENAI_API_KEY"):
-    del os.environ["OPENAI_API_KEY"]
+# if os.getenv("OPENAI_API_KEY"):
+#     del os.environ["OPENAI_API_KEY"]
 
 
 import dotenv

@@ -19,8 +19,8 @@ from trajectories.agent_self_implemented import kickoff_conversation
 app = RealtimeServer().get_app()
 
 print(os.getenv("OPENAI_API_KEY"))
-if "OPENAI_API_KEY" in os.environ: 
-    del os.environ["OPENAI_API_KEY"]
+# if "OPENAI_API_KEY" in os.environ: 
+#     del os.environ["OPENAI_API_KEY"]
 
 import dotenv 
 dotenv.load_dotenv()
@@ -54,7 +54,39 @@ This tells the outspeed server which functions to run.
 @sp.App()
 class VoiceBot:
     async def setup(self) -> None:
-        self.llm_node = sp.OpenAIRealtime(system_prompt="""Repeat exactly what you are prompted with no modifications.""")
+        # List and load the conversations from trajectories/conversations
+        conversations_dir = "trajectories/conversations/jsons"
+        self.conversations = []
+
+        if os.path.exists(conversations_dir):
+            for filename in os.listdir(conversations_dir):
+                if filename.endswith(".json"):
+                    with open(os.path.join(conversations_dir, filename), "r") as file:
+                        conversation = json.load(file)
+                        self.conversations.append(conversation)
+        else:
+            print(f"Directory {conversations_dir} does not exist.")
+
+
+        case_facts = open("negotiations/negotiation_case.txt", "r").read()
+        system_prompt = """ 
+    You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Here are the facts of the case: {}.
+
+    In addition, we simulated out some potential conversations between the parties. Here are the transcripts of those conversations:
+    """.format("EPS", "EPS", "EPS", case_facts)
+        
+        print(len(self.conversations))
+        for i, conversation in enumerate(self.conversations): 
+            system_prompt += f'\n\n------------SIMULATION {i}------------\n\n'
+
+            for message in conversation: 
+                system_prompt += f"{message['speaker']}: {message['message']}\n\n"
+                system_prompt += "--------------------------------\n\n"
+
+        print(system_prompt)
+
+        # print(system_prompt)
+        self.llm_node = sp.OpenAIRealtime(system_prompt=system_prompt)
 
     @sp.streaming_endpoint()
     async def run(self, audio_input_queue: sp.AudioStream, text_input_queue: sp.TextStream) -> sp.AudioStream:
