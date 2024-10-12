@@ -12,7 +12,7 @@ import dotenv
 dotenv.load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-case_facts = open("negotiation_case.txt", "r").read()
+case_facts = open("negotiations/negotiation_case.txt", "r").read()
 
 CONVERSATION_HISTORY = []
 
