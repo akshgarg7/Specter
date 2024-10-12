@@ -2,11 +2,14 @@ import json
 from openai import OpenAI
 import os
 
+print(os.getenv("OPENAI_API_KEY"))
 if os.getenv("OPENAI_API_KEY"):
     del os.environ["OPENAI_API_KEY"]
 
+
 import dotenv
 dotenv.load_dotenv()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 case_facts = open("negotiation_case.txt", "r").read()
 
@@ -93,18 +96,20 @@ def store_conversation_history_json(conversation_history, save_path):
     with open(save_path, "w") as f:
         json.dump(conversation_data, f, indent=4)
 
-# Create two agents with system messages
-system_message_template = """ 
-You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Here are the facts of the case: {}
-"""
-agent1_system_message = system_message_template.format("GTI", "GTI", "GTI", case_facts)
-agent2_system_message = system_message_template.format("EPS", "EPS", "EPS", case_facts)
+def kickoff_conversation(run_id):
+    print(f"Kicking off conversation {run_id}")
+    # Create two agents with system messages
+    system_message_template = """ 
+    You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Here are the facts of the case: {}
+    """
+    agent1_system_message = system_message_template.format("GTI", "GTI", "GTI", case_facts)
+    agent2_system_message = system_message_template.format("EPS", "EPS", "EPS", case_facts)
 
 
-agent1 = TextAgent("Harvey (GTI)", agent1_system_message)
-agent2 = TextAgent("Mike (EPS)", agent2_system_message)
+    agent1 = TextAgent("Harvey (GTI)", agent1_system_message)
+    agent2 = TextAgent("Mike (EPS)", agent2_system_message)
 
-# Simulate the conversation
-simulate_conversation(agent1, agent2, initial_message="Let's discuss the equity split and leadership structure for the merger.", num_turns=3)
-store_conversation_history(CONVERSATION_HISTORY, "conversations/1.txt")
-store_conversation_history_json(CONVERSATION_HISTORY, "conversations/1.json")
+    # Simulate the conversation
+    simulate_conversation(agent1, agent2, initial_message="Let's discuss the equity split and leadership structure for the merger.", num_turns=1)
+    store_conversation_history(CONVERSATION_HISTORY, f"trajectories/conversations/txts/{run_id}.txt")
+    store_conversation_history_json(CONVERSATION_HISTORY, f"trajectories/conversations/jsons/{run_id}.json")
