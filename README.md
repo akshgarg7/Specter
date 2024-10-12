@@ -1,4 +1,4 @@
-# NegotiationSim
+# Spector
 We are am building a tool to help prepare lawyers for negotiations by creating a voice agent that negotiates back and forth with you.
 
 It involves three steps: 
