@@ -36,13 +36,12 @@ This tells the outspeed server which functions to run.
 @sp.App()
 class VoiceBot:
     async def setup(self) -> None:
-        self.llm_node = sp.OpenAIRealtime(system_prompt="""
-        Only say the phrase "The sun is yellow" regardless of what is said to you.
-                                          """)
+        self.llm_node = sp.OpenAIRealtime(system_prompt="""Repeat exactly what you are prompted with no modifications.""")
 
     @sp.streaming_endpoint()
     async def run(self, audio_input_queue: sp.AudioStream, text_input_queue: sp.TextStream) -> sp.AudioStream:
         audio_output_stream: sp.AudioStream
+        print(f"Received input audio of type {text_input_queue.get_first_element_without_removing()}")
         audio_output_stream = self.llm_node.run(text_input_queue, audio_input_queue)
 
         return audio_output_stream
