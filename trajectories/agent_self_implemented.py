@@ -1,3 +1,4 @@
+import pandas as pd
 import json 
 from openai import OpenAI
 import os
@@ -113,3 +114,8 @@ def kickoff_conversation(run_id):
     simulate_conversation(agent1, agent2, initial_message="Let's discuss the equity split and leadership structure for the merger.", num_turns=1)
     store_conversation_history(CONVERSATION_HISTORY, f"trajectories/conversations/txts/{run_id}.txt")
     store_conversation_history_json(CONVERSATION_HISTORY, f"trajectories/conversations/jsons/{run_id}.json")
+
+    # Update the status of the conversation in the status.csv file
+    df = pd.read_csv("trajectories/status.csv")
+    df.loc[df["id"] == run_id, "status"] = True
+    df.to_csv("trajectories/status.csv", index=False)

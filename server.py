@@ -1,5 +1,6 @@
 import logging
 import json
+import pandas as pd
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from typing import List
@@ -127,9 +128,8 @@ async def run_trajectories(payload: RunTrajectoriesPayload):
 
 @app.get("/status")
 async def get_status(task_id: str):
-    if task_id not in tasks:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return {"status": tasks[task_id]}
+    df = pd.read_csv("trajectories/status.csv")
+    return {"status": df.loc[df["id"] == int(task_id), "status"].values[0]}
 
 @app.get("/get-trajectory")
 async def get_trajectory(task_id: str):
