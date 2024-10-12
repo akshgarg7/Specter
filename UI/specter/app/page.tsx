@@ -1,5 +1,5 @@
-import { HarveyUi } from "@/components/harvey-ui"
+import { SpecterUi } from "@/components/harvey-ui"
 
 export default function Page() {
-  return <HarveyUi />
+  return <SpecterUi />
 }
