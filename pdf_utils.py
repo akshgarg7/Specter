@@ -58,7 +58,10 @@ def ping():
 def upload(pdf_file: UploadFile):
     """ function to upload a PDF file to storage """
     """ https://fastapi.tiangolo.com/tutorial/request-files/#multiple-file-uploads to have a form upload"""
-
+    print(f"Received file of size {pdf_file.size}b")
+    with open(f"pdf/{pdf_file.filename}", "wb") as local_copy:
+        local_copy.write(pdf_file.file.read())
+        print(f"Successfully wrote to pdf/{pdf_file.filename}")
     return {"filename": pdf_file.filename}
 
 if __name__ == "__main__":
