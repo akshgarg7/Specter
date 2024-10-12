@@ -1,7 +1,9 @@
-# NegotiationSim
+# Specter, Elle, 
+
+## NegotiationSim
 ![image](https://github.com/user-attachments/assets/2afa4829-beb0-46e9-b554-fef842573004)
 
-# Rest API
+## Rest API
 POST Request at /upload 
 - Payload (Pass in PDF Contents)
 - Loads and saves the PDF
