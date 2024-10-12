@@ -1,7 +1,7 @@
 # NegotiationSim
 
 # Rest API
-POST Request at /upload
+POST Request at /upload 
 - Payload (Pass in PDF Contents)
 - Loads and saves the PDF
 
@@ -23,3 +23,7 @@ SOME Request to the voice API  /start-negotiation
 
 SOME request to the voice API /end-negotiation
 - Ends the conversation
+
+# Todos
+- Multiple trajectories, multi-agent collaboration (Aksh)
+- Upload, Voice API Stuff (Mike)
