@@ -1,3 +1,6 @@
 /.venv
 /.venv2
 *.pdf
+autogen_logs/
+.env
+.cache/
