@@ -3,6 +3,7 @@ import logging
 import outspeed as sp
 from outspeed.server import RealtimeServer
 from fastapi import FastAPI, File, UploadFile
+from pypdf import PdfReader
 
 app = RealtimeServer().get_app()
 
@@ -58,9 +59,15 @@ def upload(pdf_file: UploadFile):
     """ function to upload a PDF file to storage """
     """ https://fastapi.tiangolo.com/tutorial/request-files/#multiple-file-uploads to have a form upload"""
     print(f"Received file of size {pdf_file.size}b")
-    with open(f"pdf/{pdf_file.filename}", "wb") as local_copy:
-        local_copy.write(pdf_file.file.read())
-        print(f"Successfully wrote to pdf/{pdf_file.filename}")
+
+    reader = PdfReader(pdf_file.file)
+
+    text = "".join([page.extract_text() for page in reader.pages])
+    
+    with open(f"pdf/{pdf_file.filename}.txt", "w") as text_file:
+        text_file.write(text)
+        print(f"Successfully wrote to pdf/{pdf_file.filename}.txt")
+    
     return {"filename": pdf_file.filename}
 
 if __name__ == "__main__":
