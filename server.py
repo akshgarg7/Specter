@@ -63,10 +63,12 @@ class VoiceBot:
                 if filename.endswith(".json"):
                     with open(os.path.join(conversations_dir, filename), "r") as file:
                         conversation = json.load(file)
+                        ### RAG
+                        
+                        ### 
                         self.conversations.append(conversation)
         else:
             print(f"Directory {conversations_dir} does not exist.")
-
 
         case_facts = open("negotiations/negotiation_case.txt", "r").read()
         system_prompt = """ 
