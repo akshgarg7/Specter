@@ -18,7 +18,7 @@ from trajectories.agent_self_implemented import kickoff_conversation
 
 app = RealtimeServer().get_app()
 
-print(os.getenv("OPENAI_API_KEY"))
+# print(os.getenv("OPENAI_API_KEY"))
 # if "OPENAI_API_KEY" in os.environ: 
 #     del os.environ["OPENAI_API_KEY"]
 
@@ -43,7 +43,7 @@ def check_outspeed_version():
 
 check_outspeed_version()
 # Set up basic logging configuration
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 """
 The @outspeed.App() decorator is used to wrap the VoiceBot class.
@@ -77,13 +77,18 @@ class VoiceBot:
         
         print(len(self.conversations))
         for i, conversation in enumerate(self.conversations): 
-            system_prompt += f'\n\n------------SIMULATION {i}------------\n\n'
+            system_prompt += f'------------SIMULATION {i}------------'
+            # keep length of system prompt within 92767
+            for i, message in enumerate(conversation): 
+                system_prompt += f"{message['speaker']}: {message['message']} "
+                if i >= 2: 
+                    break
+                system_prompt += "-------------------------------- "
+            
 
-            for message in conversation: 
-                system_prompt += f"{message['speaker']}: {message['message']}\n\n"
-                system_prompt += "--------------------------------\n\n"
+        print(f"Sys prompt length: {len(system_prompt)}")
 
-        print(system_prompt)
+        system_prompt += ". Only output audio. "
 
         # print(system_prompt)
         self.llm_node = sp.OpenAIRealtime(system_prompt=system_prompt)
