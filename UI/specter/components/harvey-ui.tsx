@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
 import { Sparkles, FileText, GitBranch } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
@@ -88,26 +88,50 @@ function DefaultPage() {
 }
 
 function RunsPage() {
+  const [loadingStates, setLoadingStates] = useState(Array(10).fill(true));
+
+  useEffect(() => {
+    const timers = loadingStates.map((_, index) => {
+      const randomTime = Math.floor(Math.random() * 10000) + 5000; // Random time between 5 and 15 seconds
+      return setTimeout(() => {
+        setLoadingStates((prevStates) => {
+          const newStates = [...prevStates];
+          newStates[index] = false;
+          return newStates;
+        });
+      }, randomTime);
+    });
+
+    return () => timers.forEach(clearTimeout); // Cleanup timers on unmount
+  }, []);
+
   const runs = Array.from({ length: 10 }, (_, index) => ({
     simulation: `Simulation ${index + 1}`,
     details: "(For case GTI vs. EPS - Triggered by Aksh)"
   }));
 
   return (
-    <div className="min-h-screen bg-white p-8">
-      <h1 className="text-4xl font-serif mb-8">Specter</h1>
-      <div className="bg-gray-50 rounded-lg shadow-sm">
-        <ul className="divide-y divide-gray-200">
-          {runs.map((run, index) => (
-            <li key={index} className="p-4">
-              <span className="text-lg font-bold text-gray-900">{run.simulation}</span>
-              <span className="text-sm text-gray-500"> {run.details}</span>
-            </li>
-          ))}
-        </ul>
+    <div className="min-h-screen bg-white p-8 flex">
+      <div className="flex-1">
+        <h1 className="text-4xl font-serif mb-8">Specter</h1>
+        <div className="bg-gray-50 rounded-lg shadow-sm">
+          <ul className="divide-y divide-gray-200">
+            {runs.map((run, index) => (
+              <li key={index} className="p-4 flex justify-between items-center">
+                <div>
+                  <span className="text-lg font-bold text-gray-900">{run.simulation}</span>
+                  <span className="text-sm text-gray-500"> {run.details}</span>
+                </div>
+                {loadingStates[index] && (
+                  <div className="loader border-t-2 border-b-2 border-gray-900 w-6 h-6 rounded-full animate-spin"></div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default SpecterUi;
