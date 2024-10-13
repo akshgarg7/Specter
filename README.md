@@ -6,7 +6,13 @@ It involves three steps:
 2) sim out 100 potential trajectories for negotiations between agent 1 (representing company 1) and agent 2 (representing company 2). These trajectories then are used to create an intelligent AI persona that can think of more complex use cases. 
 3) The persona is fed into the Chat GPT voice endpoint to initialize it. Then the voice agent takes the stance of opposing counsel and negotiates against you. 
 
-![image](https://github.com/user-attachments/assets/2afa4829-beb0-46e9-b554-fef842573004)
+**High Level Overview**
+![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
+
+
+
+**Simulation Infrastructure Explained**
+![image](https://github.com/user-attachments/assets/8f8cfef4-300f-49de-93e9-53d9337d07f3)
 
 ## Rest API
 POST Request at /upload 
