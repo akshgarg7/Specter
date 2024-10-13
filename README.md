@@ -1,8 +1,8 @@
-# Spector
-We are am building a tool to help prepare lawyers for negotiations by creating a voice agent that negotiates back and forth with you.
+# Specter
+We are building a tool to help prepare lawyers for negotiations by creating a voice agent that negotiates back and forth with you.
 
 It involves three steps: 
-1) Integrating with information from past cases and the current case to retrieve relevant information about the case using past precedent
+1) Integrating with information from past cases and the current case to retrieve relevant information about the case using past precedent. 
 2) sim out 100 potential trajectories for negotiations between agent 1 (representing company 1) and agent 2 (representing company 2). These trajectories then are used to create an intelligent AI persona that can think of more complex use cases. 
 3) The persona is fed into the Chat GPT voice endpoint to initialize it. Then the voice agent takes the stance of opposing counsel and negotiates against you. 
 
@@ -32,18 +32,12 @@ SOME Request to the voice API  /start-negotiation
 SOME request to the voice API /end-negotiation
 - Ends the conversation
 
-# Todos
-- Multiple trajectories, multi-agent collaboration (Aksh)
-- Upload, Voice API Stuff (Mike)
+# How everything works 
 
 # More Deets
-The goal is to develop a tool that helps lawyers prepare for negotiations by simulating back-and-forth negotiations with an AI-powered voice agent. The agent represents opposing counsel and utilizes past case precedents and a simulation of possible negotiation trajectories to enhance realism and strategy formulation. 
-
-### Key Steps and Features
-
 1. **Case Information Integration (Past and Current Cases):**
    - **Data Retrieval:** The system integrates with a database of past cases and the current case at hand to extract relevant information. The retrieval is powered by a retrieval-augmented generation (RAG) model that efficiently pulls legal precedents, outcomes, strategies, and tactics that are relevant to the current negotiation.
-   - **Precedent Matching:** By analyzing similarities in case details, the tool identifies key precedents that might shape the negotiation strategy, highlighting historical patterns and their potential implications for the current case.
+   - **Precedent Matching (WIP):** By analyzing similarities in case details, the tool identifies key precedents that might shape the negotiation strategy, highlighting historical patterns and their potential implications for the current case.
 
 2. **Simulation of Negotiation Trajectories:**
    - **Agent 1 vs. Agent 2 Dynamics:** Two agents, one representing each party (company 1 and company 2), simulate a wide range of potential negotiation pathways (trajectories). Each agent leverages the retrieved case information and applies different negotiation strategies to explore possible outcomes.
@@ -64,4 +58,5 @@ The primary value proposition is to **“Enable anyone to prepare against expert
 ## Credits
 - Frontend based on Harvey.ai 
 - Voice API based on OpenAI's ChatGPT Voice Endpoint
-- Voice API hosted on outspeed. 
+- Voice API hosted on outspeed.
+- Cursor for writing A LOT of code
