@@ -5,6 +5,7 @@ from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from typing import List
 import shutil
+import voyageai
 import os
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,7 +14,7 @@ from outspeed.server import RealtimeServer
 from fastapi import HTTPException
 import os 
 from trajectories.agent_self_implemented import kickoff_conversation
-
+import numpy as np
 
 
 app = RealtimeServer().get_app()
@@ -57,18 +58,20 @@ class VoiceBot:
         # List and load the conversations from trajectories/conversations
         conversations_dir = "trajectories/conversations/jsons"
         self.conversations = []
+        self.rag = voyageai.Client()
 
         if os.path.exists(conversations_dir):
             for filename in os.listdir(conversations_dir):
                 if filename.endswith(".json"):
                     with open(os.path.join(conversations_dir, filename), "r") as file:
-                        conversation = json.load(file)
-                        ### RAG
-                        
-                        ### 
                         self.conversations.append(conversation)
         else:
             print(f"Directory {conversations_dir} does not exist.")
+        
+        conversation = json.load(file)
+        ### RAG
+        self.doc_embed = self.rag.embed(self.conversations, model="voyage-3", input_type="document").embeddings
+        ### 
 
         case_facts = open("negotiations/negotiation_case.txt", "r").read()
         system_prompt = """ 
@@ -77,7 +80,7 @@ class VoiceBot:
     In addition, we simulated out some potential conversations between the parties. Here are the transcripts of those conversations:
     """.format("EPS", "EPS", "EPS", case_facts)
         
-        print(len(self.conversations))
+        """
         for i, conversation in enumerate(self.conversations): 
             system_prompt += f'------------SIMULATION {i}------------'
             # keep length of system prompt within 92767
@@ -86,9 +89,21 @@ class VoiceBot:
                 if i >= 2: 
                     break
                 system_prompt += "-------------------------------- "
-            
+        """
+        query_embedding = self.doc_embed([system_prompt], model = "voyage-3", input_type = "query").embeddings[0]
+
+        # compute 
+        similarities = np.dot(self.doc_embed, query_embedding)
+        retrieved_id = np.argmax(similarities)
 
         print(f"Sys prompt length: {len(system_prompt)}")
+        system_prompt += f'------------SIMULATION {i}------------'
+        # keep length of system prompt within 92767
+        for i, message in enumerate(conversations[retrieved_id]): 
+            system_prompt += f"{message['speaker']}: {message['message']} "
+            if i >= 2: 
+                break
+            system_prompt += "-------------------------------- "
 
         system_prompt += ". Only output audio. "
 
