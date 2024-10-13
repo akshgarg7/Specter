@@ -1,12 +1,14 @@
 # Specter
-We are building a tool to help prepare lawyers for negotiations by creating a voice agent that negotiates back and forth with you.
+Specter is an AI powered web platform designed to help lawyers and legal professionals prepare for case negotiations by simulating potential outcomes. Users upload a case that they want to practice with in PDF format, which we can then cross reference against prior cases. All relevant information for the case is used to simulate multiple trajectories between an agent representing party A and an agent representing party B. Each of these trajectories forms a catalog of strategies that worked and didn't when negotiating and are used to initialize a persona for opposing counsel, one that is now much stonger and competent. This persona is then integrated with the GPT4 voice mode, which a lawyer at your firm can practice negotiating against, until a deal is verbally confirmed.
 
-It involves three steps: 
+
+**High Level Overview**
+
+At a high level, tt involves three steps: 
 1) Integrating with information from past cases and the current case to retrieve relevant information about the case using past precedent. 
 2) sim out 100 potential trajectories for negotiations between agent 1 (representing company 1) and agent 2 (representing company 2). These trajectories then are used to create an intelligent AI persona that can think of more complex use cases. 
 3) The persona is fed into the Chat GPT voice endpoint to initialize it. Then the voice agent takes the stance of opposing counsel and negotiates against you. 
 
-**High Level Overview**
 ![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
 
 
