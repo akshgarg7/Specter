@@ -15,6 +15,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 case_facts = open("negotiations/negotiation_case.txt", "r").read()
 
 CONVERSATION_HISTORY = []
+AGENTS = []
 
 # Set up your OpenAI API key
 class TextAgent:
@@ -67,32 +68,34 @@ def simulate_conversation(agent1, agent2, initial_message, num_turns=5):
         agent1_response = agent1.respond()
         agent1.add_message("assistant", agent1_response)
         agent2.add_message("user", agent1_response)
-        CONVERSATION_HISTORY.append(f"{agent1.name}: {agent1_response}")
-        print(f"{agent1.name}: {agent1_response}\n")
-        print(f'--------------------------------')
+        CONVERSATION_HISTORY.append(f"{agent1_response}")
+        # print(f"{agent1.name}: {agent1_response}\n")
+        # print(f'--------------------------------')
 
         # Agent 2 responds
         agent2_response = agent2.respond()
         agent2.add_message("assistant", agent2_response)
         agent1.add_message("user", agent2_response)
-        CONVERSATION_HISTORY.append(f"{agent2.name}: {agent2_response}")
-        print(f"{agent2.name}: {agent2_response}\n")
-        print(f'--------------------------------')
+        print(agent1.name, agent2.name)
+        CONVERSATION_HISTORY.append(f"{agent2_response}")
+        AGENTS.append(agent1.name)
+        AGENTS.append(agent2.name)
+        # print(f"{agent2.name}: {agent2_response}\n")
+        # print(f'--------------------------------')
 
         if consensus_reached(CONVERSATION_HISTORY):
             print("Consensus reached!")
             break
 
-def store_conversation_history(conversation_history, save_path):
+def store_conversation_history(conversation_history, agents, save_path):
     with open(save_path, "w") as f:
-        for line in conversation_history:
+        for line, agent in zip(conversation_history, agents):
             f.write(line + "\n")
 
-def store_conversation_history_json(conversation_history, save_path):
+def store_conversation_history_json(conversation_history, agents, save_path):
     conversation_data = []
-    for line in conversation_history:
-        speaker, message = line.split(": ", 1)
-        conversation_data.append({"speaker": speaker, "message": message})
+    for line, agent in zip(conversation_history, agents):
+        conversation_data.append({"speaker": agent, "message": line})
 
     with open(save_path, "w") as f:
         json.dump(conversation_data, f, indent=4)
@@ -111,10 +114,13 @@ def kickoff_conversation(run_id):
     agent2 = TextAgent("Mike (EPS)", agent2_system_message)
 
     # Simulate the conversation
+    
     simulate_conversation(agent1, agent2, initial_message="Let's discuss the equity split and leadership structure for the merger.", num_turns=1)
-    store_conversation_history(CONVERSATION_HISTORY, f"trajectories/conversations/txts/{run_id}.txt")
-    store_conversation_history_json(CONVERSATION_HISTORY, f"trajectories/conversations/jsons/{run_id}.json")
+    store_conversation_history(CONVERSATION_HISTORY, AGENTS, f"trajectories/conversations/txts/{run_id}.txt")
+    store_conversation_history_json(CONVERSATION_HISTORY, AGENTS, f"trajectories/conversations/jsons/{run_id}.json")
 
+    # print(CONVERSATION_HISTORY)
+    print(AGENTS)
     # Update the status of the conversation in the status.csv file
     df = pd.read_csv("trajectories/status.csv")
     df.loc[df["id"] == run_id, "status"] = True

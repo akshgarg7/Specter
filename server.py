@@ -43,7 +43,7 @@ def check_outspeed_version():
 
 check_outspeed_version()
 # Set up basic logging configuration
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 """
 The @outspeed.App() decorator is used to wrap the VoiceBot class.
@@ -75,15 +75,17 @@ class VoiceBot:
     In addition, we simulated out some potential conversations between the parties. Here are the transcripts of those conversations:
     """.format("EPS", "EPS", "EPS", case_facts)
         
-        print(len(self.conversations))
+        # print(len(self.conversations))
         for i, conversation in enumerate(self.conversations): 
             system_prompt += f'\n\n------------SIMULATION {i}------------\n\n'
 
-            for message in conversation: 
+            for i, message in enumerate(conversation): 
                 system_prompt += f"{message['speaker']}: {message['message']}\n\n"
+                if i >= 0:
+                    break
                 system_prompt += "--------------------------------\n\n"
 
-        print(system_prompt)
+        # print(system_prompt)
 
         # print(system_prompt)
         self.llm_node = sp.OpenAIRealtime(system_prompt=system_prompt)

@@ -65,3 +65,4 @@ The primary value proposition is to **“Enable anyone to prepare against expert
 - Frontend based on Harvey.ai 
 - Voice API based on OpenAI's ChatGPT Voice Endpoint
 - Voice API hosted on outspeed. 
+- A LOT of help from Cursor :) 
