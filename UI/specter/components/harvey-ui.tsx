@@ -92,7 +92,7 @@ function RunsPage() {
 
   useEffect(() => {
     const timers = loadingStates.map((_, index) => {
-      const randomTime = Math.floor(Math.random() * 10000) + 5000; // Random time between 5 and 15 seconds
+      const randomTime = Math.floor(Math.random() * 1000) + 5000; // Random time between 5 and 15 seconds
       return setTimeout(() => {
         setLoadingStates((prevStates) => {
           const newStates = [...prevStates];
@@ -110,8 +110,14 @@ function RunsPage() {
     details: "(For case GTI vs. EPS - Triggered by Aksh)"
   }));
 
+  const allTasksComplete = loadingStates.every(state => !state);
+
+  const handleNegotiateClick = () => {
+    window.location.href = 'https://playground.outspeed.com/';
+  };
+
   return (
-    <div className="min-h-screen bg-white p-8 flex">
+    <div className="min-h-screen bg-white p-8 flex flex-col">
       <div className="flex-1">
         <h1 className="text-4xl font-serif mb-8">Specter</h1>
         <div className="bg-gray-50 rounded-lg shadow-sm">
@@ -130,6 +136,14 @@ function RunsPage() {
           </ul>
         </div>
       </div>
+      {allTasksComplete && (
+        <button
+          onClick={handleNegotiateClick}
+          className="mt-4 mb-8 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition-colors"
+        >
+          Click to Negotiate
+        </button>
+      )}
     </div>
   );
 }
