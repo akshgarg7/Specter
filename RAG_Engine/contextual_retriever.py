@@ -26,7 +26,6 @@ openai_client = OpenAI(
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
-
 def get_openai_embeddings(input_data):
     response = openai_client.embeddings.create(input=input_data, 
                                                model="text-embedding-3-small")
@@ -152,6 +151,8 @@ class ContextualRetrieval:
                 finalized_vectors.append(future.result())
 
         finalized_vectors = sorted(finalized_vectors, key=lambda x: x['id'])
+        # for i in range(len(vectors)):
+        #     print(vectors[i])
 
         # Upsert data into the index in batches and in parallel
         batch_size = 100
@@ -170,8 +171,8 @@ class ContextualRetrieval:
         """
         index = pc.Index(index_name)
         query_vector = self.embeddings(query)
-        results = index.query(vector=query_vector, top_k=top_k, include_values=True, include_metadata=True)
-        return results
+        results = index.query(vector=query_vector, top_k=top_k, include_values=include_values, include_metadata=include_metadata)
+        return results['matches']
 
     @staticmethod
     def generate_cache_key(document: str) -> str:
@@ -195,4 +196,3 @@ class ContextualRetrieval:
         messages = prompt.format_messages(query=query, chunks="\n\n".join(relevant_chunks))
         response = self.llm.invoke(messages)
         return response.content
-
