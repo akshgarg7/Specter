@@ -2,16 +2,11 @@
 
 import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
-import { Sparkles, FileText, GitBranch, MessageSquare, UploadCloud } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
+import { FileText, GitBranch, MessageSquare, UploadCloud } from "lucide-react"
 
 export function SpecterUi() {
   const handlePracticeClick = () => {
     window.location.href = 'https://playground.outspeed.com/';
-  };
-
-  const handleAskSpecterClick = () => {
-    document.getElementById('fileUpload').click();
   };
 
   return (
