@@ -50,7 +50,6 @@ The @outspeed.App() decorator is used to wrap the VoiceBot class.
 This tells the outspeed server which functions to run.
 """
 
-
 @sp.App()
 class VoiceBot:
     async def setup(self) -> None:
@@ -163,11 +162,17 @@ async def run_trajectories(payload: RunTrajectoriesPayload):
 @app.get("/status")
 async def get_status(task_id: str):
     df = pd.read_csv("trajectories/status.csv")
-    return {"status": df.loc[df["id"] == int(task_id), "status"].values[0]}
+    value = df.loc[df['id'] == int(task_id), 'status'].values[0]
+    return bool(value)
+
+@app.get("/num-trajectories")
+async def get_num_trajectories():
+    df = pd.read_csv("trajectories/status.csv")
+    return len(df)
 
 @app.get("/get-trajectory")
 async def get_trajectory(task_id: str):
-    save_folder = "trajectories/conversations"
+    save_folder = "trajectories/conversations/jsons"
     conversation_file = os.path.join(save_folder, f"{task_id}.json")
     if not os.path.exists(conversation_file):
         raise HTTPException(status_code=404, detail="Conversation file not found")
