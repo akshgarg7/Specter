@@ -4,6 +4,12 @@ import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
 import { FileText, GitBranch, MessageSquare, UploadCloud } from "lucide-react"
 
+// Define the type for a message
+interface Message {
+  speaker: string;
+  message: string;
+}
+
 export function SpecterUi() {
   const handlePracticeClick = () => {
     window.location.href = 'https://playground.outspeed.com/';
@@ -123,7 +129,7 @@ function RunsPage() {
   const [loadingStates, setLoadingStates] = useState(Array(10).fill(true));
 
   useEffect(() => {
-    const checkTaskStatus = async (index) => {
+    const checkTaskStatus = async (index: number) => {
       try {
         const response = await fetch(`http://localhost:8080/status?task_id=${index + 1}`);
         const data = await response.json();
@@ -193,8 +199,8 @@ function RunsPage() {
 }
 
 function ViewRunsPage() {
-  const [conversations, setConversations] = useState([]);
-  const [selectedRun, setSelectedRun] = useState(null);
+  const [conversations, setConversations] = useState<Message[]>([]);
+  const [selectedRun, setSelectedRun] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -222,7 +228,7 @@ function ViewRunsPage() {
     }
   }, [selectedRun]);
 
-  const handleRunChange = (event) => {
+  const handleRunChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRun(event.target.value);
   };
 
