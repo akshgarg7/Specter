@@ -1,5 +1,3 @@
-import { Separator } from "@/components/ui/separator"
-
 export default function Component() {
   const runs = ["Run 1", "Run 2", "Run 3", "Run 4"]
 

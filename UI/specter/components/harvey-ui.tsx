@@ -95,7 +95,7 @@ function DefaultPage() {
       <div className="mb-6 px-1 rounded-lg shadow-sm">
         <p className="text-gray-800 text-lg leading-relaxed">
           Welcome to <span className="font-semibold">Specter</span>, your AI-powered legal assistant. Negotiate your upcoming deals with ease. Upload your case documents and specify any precedents to follow. 
-          Unsure of what's relevant? Let us identify key documents for you. We're ready to assist you whenever you're ready to proceed.
+          Unsure of what&apos;s relevant? Let us identify key documents for you. We&apos;re ready to assist you whenever you&apos;re ready to proceed.
         </p>
       </div>
 
