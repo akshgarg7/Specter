@@ -146,13 +146,15 @@ async def run_trajectories(payload: RunTrajectoriesPayload):
     # logging.info(f"Kicking off conversations")
     import pandas as pd
 
+    range_list = list(range(1, n+1))
+
     # Create a pandas DataFrame with n rows, each marked as False
-    df = pd.DataFrame({"id": range(n), "status": [False] * n})
+    df = pd.DataFrame({"id": range_list, "status": [False] * n})
     df.to_csv(f"trajectories/status.csv", index=False)
 
 
     with ThreadPoolExecutor(max_workers=n) as executor:
-        futures = [executor.submit(kickoff_conversation, i) for i in range(n)]
+        futures = [executor.submit(kickoff_conversation, i) for i in range_list]
         
     for future in as_completed(futures):
         future.result()

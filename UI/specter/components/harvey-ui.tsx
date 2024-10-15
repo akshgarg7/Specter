@@ -96,19 +96,35 @@ function RunsPage() {
   const [loadingStates, setLoadingStates] = useState(Array(10).fill(true));
 
   useEffect(() => {
-    const timers = loadingStates.map((_, index) => {
-      const randomTime = Math.floor(Math.random() * 2000) + 2000; // Random time between 5 and 15 seconds
-      return setTimeout(() => {
-        setLoadingStates((prevStates) => {
-          const newStates = [...prevStates];
-          newStates[index] = false;
-          return newStates;
-        });
-      }, randomTime);
+    const checkTaskStatus = async (index) => {
+      try {
+        const response = await fetch(`http://localhost:8080/status?task_id=${index + 1}`);
+        const data = await response.json();
+        console.log(data)
+        if (data === true) {
+          setLoadingStates((prevStates) => {
+            const newStates = [...prevStates];
+            newStates[index] = false;
+            return newStates;
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching task status:", error);
+      }
+    };
+
+    loadingStates.forEach((_, index) => {
+      checkTaskStatus(index);
     });
 
-    return () => timers.forEach(clearTimeout); // Cleanup timers on unmount
-  }, []);
+    const intervalId = setInterval(() => {
+      loadingStates.forEach((_, index) => {
+        checkTaskStatus(index);
+      });
+    }, 5000); // Check every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, [loadingStates]);
 
   const runs = Array.from({ length: 10 }, (_, index) => ({
     simulation: `Simulation ${index + 1}`,
@@ -154,9 +170,30 @@ function ViewRunsPage() {
   const [selectedRun, setSelectedRun] = useState(null);
 
   useEffect(() => {
-    // Fetch conversations
-    fetchConversations().then(setConversations);
-  }, []);
+    const fetchConversations = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/get-trajectory?task_id=${selectedRun}`);
+        const data = await response.json();
+
+        console.log(data)
+        
+        // Access the 'conversation' array from the response
+        if (data && Array.isArray(data.conversation)) {
+          setConversations(data.conversation);
+        } else {
+          console.error("Unexpected data format:", data);
+          setConversations([]);
+        }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+        setConversations([]);
+      }
+    };
+
+    if (selectedRun !== null) {
+      fetchConversations();
+    }
+  }, [selectedRun]);
 
   const handleRunChange = (event) => {
     setSelectedRun(event.target.value);
@@ -167,14 +204,14 @@ function ViewRunsPage() {
       <h2 className="text-2xl font-serif mb-4">View Runs</h2>
       <select onChange={handleRunChange} className="mb-4 p-2 border rounded">
         <option value="">Select a run</option>
-        {conversations.map((conversation, index) => (
-          <option key={index} value={index}>
-            Run {index + 1} {/* Changed to display 1 to 10 */}
+        {Array.from({ length: 10 }, (_, index) => (
+          <option key={index} value={index + 1}>
+            Run {index + 1}
           </option>
         ))}
       </select>
       <div className="bg-gray-50 rounded-lg shadow-sm p-4">
-        {selectedRun !== null && conversations[selectedRun].map((message, index) => (
+        {selectedRun !== null && conversations.map((message, index) => (
           <div key={index} className={`p-2 ${message.speaker.includes("GTI") ? "text-blue-600" : "text-green-600"}`}>
             <strong>{message.speaker}:</strong> {message.message}
           </div>
