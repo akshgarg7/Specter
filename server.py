@@ -1,7 +1,7 @@
 import logging
 import json
 import pandas as pd
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from pydantic import BaseModel
 from typing import List
 import shutil
@@ -10,7 +10,6 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import outspeed as sp
 from outspeed.server import RealtimeServer
-from fastapi import HTTPException
 import os 
 from trajectories.agent_self_implemented import kickoff_conversation
 
@@ -105,14 +104,22 @@ def ping():
     return {"message": "pong"}
 
 @app.post("/upload")
-def upload(pdf_file: UploadFile):
-    """ function to upload a PDF file to storage """
-    """ https://fastapi.tiangolo.com/tutorial/request-files/#multiple-file-uploads to have a form upload"""
-    print(f"Received file of size {pdf_file.size}b")
-    with open(f"pdf/{pdf_file.filename}", "wb") as local_copy:
-        local_copy.write(pdf_file.file.read())
-        print(f"Successfully wrote to pdf/{pdf_file.filename}")
-    return {"filename": pdf_file.filename}
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        # Define the directory where you want to save the uploaded files
+        upload_directory = "uploads"
+        os.makedirs(upload_directory, exist_ok=True)
+
+        # Define the file path
+        file_path = os.path.join(upload_directory, file.filename)
+
+        # Save the file
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        return {"filename": file.filename, "message": "File uploaded successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # In-memory storage for tasks and their statuses
 tasks = {}
@@ -141,9 +148,7 @@ async def run_trajectories(payload: RunTrajectoriesPayload):
     tasks[task_id] = "running"
     n = payload.n
     conversations[task_id] = []
-
-    # print('hi')
-    # logging.info(f"Kicking off conversations")
+    
     import pandas as pd
 
     range_list = list(range(1, n+1))

@@ -145,6 +145,6 @@ def kickoff_conversation(run_id, max_turns=2):
     store_conversation_history(conversation_history, agents, f"trajectories/conversations/txts/{run_id}.txt")
     store_conversation_history_json(conversation_history, agents, f"trajectories/conversations/jsons/{run_id}.json")
     print(f"ID {run_id}: {conversation_history[-1]}")
-
+    update_status_csv(run_id)
 if __name__ == "__main__":
     kickoff_conversation(1)

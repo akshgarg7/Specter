@@ -1,5 +1,6 @@
-# Modified from tutorial on: https://www.youtube.com/watch?v=6efwN_US-zk
 
+# Modified from tutorial on: https://www.youtube.com/watch?v=6efwN_US-zk
+import uuid
 import hashlib
 import os
 import getpass
@@ -54,13 +55,15 @@ class ContextualRetrieval:
             max_retries=2,
         )
 
-    def process_document(self, document: str) -> Tuple[List[Document], List[Document]]:
+    def process_document(self, document: str, document_name="") -> Tuple[List[Document], List[Document]]:
         """
         Process a document by splitting it into chunks and generating context for each chunk.
         """
 
         start_time = time.time()
         chunks = self.text_splitter.create_documents([document])
+        for chunk in chunks:
+            chunk.metadata["document_name"] = document_name
         end_time = time.time()
         print(f"Time taken to split document into chunks: {end_time - start_time} seconds")
 
@@ -117,11 +120,16 @@ class ContextualRetrieval:
         """
         index.upsert(vectors=vectors)
 
-    def get_parallel_embeddings(self, i, chunk): 
+    def get_parallel_embeddings(self, i, chunk):
+        # add a uuid as well 
+        uuid_id = str(uuid.uuid4())
+        id = f"{chunk.metadata['document_name']}_{i}_{uuid_id}"
         output = self.embeddings(chunk.page_content)
-        metadata = {"text": chunk.page_content}
-        return {"id": str(i), "values": output, "metadata": metadata}
-
+        metadata = {
+            "text": chunk.page_content,
+            "document_name": chunk.metadata.get("document_name")
+        }
+        return {"id": id, "values": output, "metadata": metadata}
 
     def create_pinecone_index(self, index_name: str, chunks: List[Document]):
         """
@@ -139,6 +147,8 @@ class ContextualRetrieval:
                 ),
             )
 
+        else: 
+            print(f"Index {index_name} already exists")
         # Connect to the index
         index = pc.Index(index_name)
 
@@ -196,3 +206,27 @@ class ContextualRetrieval:
         messages = prompt.format_messages(query=query, chunks="\n\n".join(relevant_chunks))
         response = self.llm.invoke(messages)
         return response.content
+
+def index_documents(): 
+    cr = ContextualRetrieval()
+    for file in os.listdir("precedents/"):
+        filename = "precedents/" + file
+        print(f"Indexing {filename}")
+        with open(filename, "r") as f:
+            original_chunks, contextualized_chunks = cr.process_document(f.read(), filename)
+            cr.create_pinecone_index("contextual-summary", contextualized_chunks)
+
+def closest_matching_documents(query: str, top_k: int = 3): 
+    cr = ContextualRetrieval()
+    results = cr.query_pinecone_index("contextual-summary", query, top_k=top_k*30, include_values=False, include_metadata=True)
+    document_names = set()
+    for result in results: 
+        document_names.add(result.metadata["document_name"])
+        if len(document_names) == top_k: 
+            break
+    return list(document_names)
+
+
+if __name__ == "__main__":
+    index_documents() 
+    print(closest_matching_documents("What is the capital of France?"))
