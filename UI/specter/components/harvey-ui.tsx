@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
-import { Sparkles, FileText, GitBranch, MessageSquare } from "lucide-react"
+import { Sparkles, FileText, GitBranch, MessageSquare, UploadCloud } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 
 export function SpecterUi() {
@@ -22,7 +22,7 @@ export function SpecterUi() {
           <h1 className="text-3xl font-serif mb-8">Specter</h1>
           <nav className="space-y-4">
             <Link to="/" className="flex items-center space-x-3 px-3 py-2 bg-gray-100 rounded-md">
-              <Sparkles className="w-5 h-5" />
+              <UploadCloud className="w-5 h-5" />
               <span className="font-medium">Upload</span>
             </Link>
             <Link to="/runs" className="flex items-center space-x-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md">
@@ -97,7 +97,7 @@ function DefaultPage() {
         </div>
       </div>
 
-      <div className="mb-6 bg-blue-50 p-6 rounded-lg shadow-sm">
+      <div className="mb-6 px-1 rounded-lg shadow-sm">
         <p className="text-gray-800 text-lg leading-relaxed">
           Welcome to <span className="font-semibold">Specter</span>, your AI-powered legal assistant. Negotiate your upcoming deals with ease. Upload your case documents and specify any precedents to follow. 
           Unsure of what's relevant? Let us identify key documents for you. We're ready to assist you whenever you're ready to proceed.

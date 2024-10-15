@@ -13,7 +13,7 @@ import dotenv
 dotenv.load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-case_facts = open("cases/negotiation_case.txt", "r").read()
+# case_facts = open("cases/negotiation_case.txt", "r").read()
 
 # Set up your OpenAI API key
 class TextAgent:
@@ -125,15 +125,21 @@ def update_status_csv(run_id):
             df = pd.concat([df, pd.DataFrame([{"id": run_id, "status": True}])], ignore_index=True)
         df.to_csv(status_file_path, index=False)
 
-def kickoff_conversation(run_id, max_turns=2):
+def kickoff_conversation(run_id, max_turns=2, case_facts = "", relevant_precedent = ""):
     print(f"Kicking off conversation {run_id}")
     # Create two agents with system messages
     system_message_template = """ 
-    You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Keep your comments to less than 50 words. Here are the facts of the case: {}
+    You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Keep your comments to less than 50 words. 
+
+    ==========================================================
+    Here are the facts of the case: {}
+
+    ==========================================================
+    Here are the relevant precedents: {}
     """
 
-    agent1_system_message = system_message_template.format("GTI", "GTI", "GTI", case_facts)
-    agent2_system_message = system_message_template.format("EPS", "EPS", "EPS", case_facts)
+    agent1_system_message = system_message_template.format("GTI", "GTI", "GTI", case_facts, relevant_precedent)
+    agent2_system_message = system_message_template.format("EPS", "EPS", "EPS", case_facts, relevant_precedent)
 
     agent1 = TextAgent("Harvey (GTI)", agent1_system_message)
     agent2 = TextAgent("Mike (EPS)", agent2_system_message)
