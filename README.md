@@ -10,12 +10,6 @@ At a high level, it involves three steps:
 3) The persona is fed into the Chat GPT voice endpoint to initialize it. Then the voice agent takes the stance of opposing counsel and negotiates against you.
 
 
-## Architecture
-![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
-
-**Simulation Infrastructure Explained**
-![image](https://github.com/user-attachments/assets/8f8cfef4-300f-49de-93e9-53d9337d07f3)
-
 
 ## RAG Engine
    - Our RAG Engine uses a **contextual summary** approach pioneered by Anthropic, which allows for more efficient and accurate extraction of legal precedents, outcomes, strategies, and tactics relevant to the current negotiation. 
@@ -34,6 +28,11 @@ At a high level, it involves three steps:
    - **Natural Language Interaction:** Once the intelligent persona is generated, it is integrated into a voice bot powered by the Chat GPT voice endpoint. This allows the user to interact with the agent in a natural, conversational manner, simulating a real negotiation scenario with opposing counsel.
    - **Realistic Back-and-Forth Negotiations:** The voice bot, representing opposing counsel, negotiates against the user. It simulates pressure tactics, alternative offers, counterarguments, and other elements that a lawyer would face in real-world negotiations, offering a highly immersive preparation experience.
 
+## Architecture
+![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
+
+**Simulation Infrastructure Explained**
+![image](https://github.com/user-attachments/assets/8f8cfef4-300f-49de-93e9-53d9337d07f3)
 
 ## Credits
 - Frontend based on Harvey.ai 
