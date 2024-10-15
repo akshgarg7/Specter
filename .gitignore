@@ -5,3 +5,5 @@ autogen_logs/
 .env
 .cache/
 .DS_Store
+**/pycache/
+trajectories/conversations/
