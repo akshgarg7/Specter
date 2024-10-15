@@ -54,6 +54,8 @@ export function SpecterUi() {
 }
 
 function DefaultPage() {
+  const [relevantDocs, setRelevantDocs] = useState<string[]>([]);
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -62,7 +64,7 @@ function DefaultPage() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8080/upload', { // Ensure the URL matches your FastAPI server's URL and port
+      const response = await fetch('http://localhost:8080/upload', {
         method: 'POST',
         body: formData,
       });
@@ -70,6 +72,13 @@ function DefaultPage() {
       if (response.ok) {
         const data = await response.json();
         alert(`File uploaded successfully: ${data.filename}`);
+
+        // Fetch relevant documents
+        const relevantResponse = await fetch(`http://localhost:8080/relevant-docs/${data.filename}`);
+        if (relevantResponse.ok) {
+          const relevantData = await relevantResponse.json();
+          setRelevantDocs(relevantData.relevant_docs);
+        }
       } else {
         alert('File upload failed');
       }
@@ -88,10 +97,10 @@ function DefaultPage() {
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-lg font-medium mb-2">Upload Now</h2>
-        <p className="text-gray-700">
-          Welcome to Specter, your AI-powered legal assistant. Use it to negotiate your upcoming deals. Upload your case documents and specific precedent you want us to follow. If you don't know what's relevant, let us find relevant things on your behalf! We're ready whenever you are to proceed
+      <div className="mb-6 bg-blue-50 p-6 rounded-lg shadow-sm">
+        <p className="text-gray-800 text-lg leading-relaxed">
+          Welcome to <span className="font-semibold">Specter</span>, your AI-powered legal assistant. Negotiate your upcoming deals with ease. Upload your case documents and specify any precedents to follow. 
+          Unsure of what's relevant? Let us identify key documents for you. We're ready to assist you whenever you're ready to proceed.
         </p>
       </div>
 
@@ -103,14 +112,12 @@ function DefaultPage() {
       <div>
         <h2 className="text-lg font-medium mb-4">Sources</h2>
         <div className="space-y-3">
-          <div className="flex items-center space-x-3 p-3 bg-gray-100 rounded-md">
-            <FileText className="w-5 h-5" />
-            <span>U.S. ex rel Cairns.pdf</span>
-          </div>
-          <div className="flex items-center space-x-3 p-3 bg-gray-100 rounded-md">
-            <FileText className="w-5 h-5" />
-            <span>U.S. ex rel Greenfield.pdf</span>
-          </div>
+          {relevantDocs.map((doc, index) => (
+            <div key={index} className="flex items-center space-x-3 p-3 bg-gray-100 rounded-md">
+              <FileText className="w-5 h-5" />
+              <span>{doc}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
