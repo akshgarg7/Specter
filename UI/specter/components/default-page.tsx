@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { FileText } from 'lucide-react';
+import { BACKEND_URL } from '../lib/config';
 
 function DefaultPage() {
     const [relevantDocs, setRelevantDocs] = useState<string[]>([]);
@@ -16,7 +17,7 @@ function DefaultPage() {
       formData.append('file', file);
   
       try {
-        const response = await fetch('http://localhost:8080/upload', {
+        const response = await fetch(`${BACKEND_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -26,7 +27,7 @@ function DefaultPage() {
           alert(`File uploaded successfully: ${data.filename}`);
   
           // Fetch relevant documents
-          const relevantResponse = await fetch(`http://localhost:8080/relevant-docs/${data.filename}`);
+          const relevantResponse = await fetch(`${BACKEND_URL}/relevant-docs/${data.filename}`);
           if (relevantResponse.ok) {
             const relevantData = await relevantResponse.json();
             setRelevantDocs(relevantData.relevant_docs);

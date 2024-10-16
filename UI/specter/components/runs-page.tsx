@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { BACKEND_URL } from '../lib/config';
 
 function RunsPage() {
     const [loadingStates, setLoadingStates] = useState(Array(10).fill(true));
@@ -6,7 +7,7 @@ function RunsPage() {
     useEffect(() => {
       const checkTaskStatus = async (index: number) => {
         try {
-          const response = await fetch(`http://localhost:8080/status?task_id=${index + 1}`);
+          const response = await fetch(`${BACKEND_URL}/status?task_id=${index + 1}`);
           const data = await response.json();
           console.log(data)
           if (data === true) {

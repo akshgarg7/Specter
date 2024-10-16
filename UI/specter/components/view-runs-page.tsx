@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-
+import { BACKEND_URL } from '../lib/config';
 interface Message {
     speaker: string;
     message: string;
@@ -12,7 +12,7 @@ function ViewRunsPage() {
     useEffect(() => {
       const fetchConversations = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/get-trajectory?task_id=${selectedRun}`);
+          const response = await fetch(`${BACKEND_URL}/get-trajectory?task_id=${selectedRun}`);
           const data = await response.json();
   
           console.log(data)
