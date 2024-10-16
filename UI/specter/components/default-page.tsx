@@ -55,13 +55,13 @@ function DefaultPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ n: 10 }), // Assuming n is 1 for this example
+          body: JSON.stringify({ n: 10 }), // Assuming n is 10 for this example
         });
 
         if (response.ok) {
-          const data = await response.json();
+          await response.json(); // Consume the response without assigning it
           alert('Trajectories simulation completed successfully');
-          // Handle the response data as needed
+          // Handle the response data as needed in the future
         } else {
           alert('Failed to run trajectories simulation');
         }
