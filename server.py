@@ -2,6 +2,7 @@ import logging
 import json
 import pandas as pd
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import shutil
@@ -18,9 +19,14 @@ from RAG_Engine.contextual_retriever import closest_matching_documents
 
 app = RealtimeServer().get_app()
 
-# print(os.getenv("OPENAI_API_KEY"))
-# if "OPENAI_API_KEY" in os.environ: 
-#     del os.environ["OPENAI_API_KEY"]
+# Add CORS middleware to allow all origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # This allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 import dotenv 
 dotenv.load_dotenv()
