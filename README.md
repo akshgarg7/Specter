@@ -34,6 +34,12 @@ At a high level, it involves three steps:
    - **Natural Language Interaction:** Once the intelligent persona is generated, it is integrated into a voice bot powered by the Chat GPT voice endpoint. This allows the user to interact with the agent in a natural, conversational manner, simulating a real negotiation scenario with opposing counsel.
    - **Realistic Back-and-Forth Negotiations:** The voice bot, representing opposing counsel, negotiates against the user. It simulates pressure tactics, alternative offers, counterarguments, and other elements that a lawyer would face in real-world negotiations, offering a highly immersive preparation experience.
 
+## Get Started: 
+1) Clone: Clone the repo
+2) Requirements: `pip install -r requirements.txt`
+3) API Keys: Add OpenAI and Pinecone Keys in .env
+4) Host backend: `python server.py` from root folder
+5) Host frontend: Navigate to UI/specter, and run `npm run dev`
 
 ## Credits
 - Frontend based on Harvey.ai 
