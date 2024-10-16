@@ -1,6 +1,7 @@
 # Specter
 Specter is an AI powered web platform designed to help lawyers and legal professionals prepare for case negotiations by simulating potential outcomes. Users upload a case that they want to practice with in PDF format, which we can then cross reference against prior cases. All relevant information for the case is used to simulate multiple trajectories between an agent representing party A and an agent representing party B. Each of these trajectories forms a catalog of strategies that worked and didn't when negotiating and are used to initialize a persona for opposing counsel, one that is now much stronger and competent. This persona is then integrated with the GPT4 voice mode, which a lawyer at your firm can practice negotiating against, until a deal is verbally confirmed.
 
+![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
 
 ## High Level Overview
 
@@ -23,6 +24,8 @@ At a high level, it involves three steps:
    - **Parallel Simulations:** The system generates and runs 100 potential negotiation trajectories in parallel, covering various tactics, strategies, and outcomes. This large-scale simulation allows the tool to map out a diverse set of negotiation outcomes, enabling lawyers to visualize different ways the negotiation could unfold.
    - **Trajectory Evaluation:** Each trajectory is analyzed for potential success, risks, and opportunities, helping the lawyer prepare for a wide array of negotiation moves, counter-moves, and final outcomes.
 
+![image](https://github.com/user-attachments/assets/8f8cfef4-300f-49de-93e9-53d9337d07f3)
+
 ## Intelligent AI Persona Creation
    - **Persona Synthesis:** After running the 100 trajectories, the system synthesizes the knowledge gained from the simulations into an intelligent AI persona. This persona embodies the thought process, strategies, and negotiation stances of an experienced opponent, enabling more nuanced and sophisticated interactions during practice negotiations.
    - **Adaptive Responses:** The AI persona is designed to adapt to different negotiation styles and react dynamically to the user’s inputs, helping the lawyer refine their tactics in real-time.
@@ -31,11 +34,6 @@ At a high level, it involves three steps:
    - **Natural Language Interaction:** Once the intelligent persona is generated, it is integrated into a voice bot powered by the Chat GPT voice endpoint. This allows the user to interact with the agent in a natural, conversational manner, simulating a real negotiation scenario with opposing counsel.
    - **Realistic Back-and-Forth Negotiations:** The voice bot, representing opposing counsel, negotiates against the user. It simulates pressure tactics, alternative offers, counterarguments, and other elements that a lawyer would face in real-world negotiations, offering a highly immersive preparation experience.
 
-## Architecture
-![image](https://github.com/user-attachments/assets/2784feb1-fb97-465d-b319-c912f2d20474)
-
-**Simulation Infrastructure Explained**
-![image](https://github.com/user-attachments/assets/8f8cfef4-300f-49de-93e9-53d9337d07f3)
 
 ## Credits
 - Frontend based on Harvey.ai 
