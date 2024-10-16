@@ -4,7 +4,7 @@ from openai import OpenAI
 import os
 import threading
 
-print(os.getenv("OPENAI_API_KEY"))
+# print(os.getenv("OPENAI_API_KEY"))
 # if os.getenv("OPENAI_API_KEY"):
 #     del os.environ["OPENAI_API_KEY"]
 
@@ -65,7 +65,7 @@ def simulate_conversation(agent1, agent2, initial_message, num_turns=5):
     conversation_history.append(initial_message)
     agents.append(agent1.name)
 
-    print(f"Conversation Start: {initial_message}")
+    # print(f"Conversation Start: {initial_message}")
 
     for turn in range(num_turns):
         # Agent 2 responds
@@ -83,7 +83,7 @@ def simulate_conversation(agent1, agent2, initial_message, num_turns=5):
         agents.append(agent1.name)
 
         if consensus_reached(conversation_history):
-            print("Consensus reached!")
+            # print("Consensus reached!")
             break
 
     return conversation_history, agents
@@ -126,7 +126,7 @@ def update_status_csv(run_id):
         df.to_csv(status_file_path, index=False)
 
 def kickoff_conversation(run_id, max_turns=2, case_facts = "", relevant_precedent = ""):
-    print(f"Kicking off conversation {run_id}")
+    # print(f"Kicking off conversation {run_id}")
     # Create two agents with system messages
     system_message_template = """ 
     You are a lawyer representing {} in a merger negotiation. Be firm and advocate strongly for your client's position while remaining professional and solution-oriented. Focus on {}'s core interests and long-term goals, and seek to find mutually beneficial solutions where possible. Use active listening to identify the priorities of the other party and address them in a way that aligns with {}'s objectives. Stay aligned with the case documents and ensure all proposals are legally sound and well-supported by precedent. Always keep the tone constructive and aim to foster a productive working relationship, even in moments of disagreement. Keep your comments to less than 50 words. 
@@ -150,7 +150,7 @@ def kickoff_conversation(run_id, max_turns=2, case_facts = "", relevant_preceden
     conversation_history, agents = simulate_conversation(agent1, agent2, initial_message=initial_message, num_turns=max_turns)
     store_conversation_history(conversation_history, agents, f"trajectories/conversations/txts/{run_id}.txt")
     store_conversation_history_json(conversation_history, agents, f"trajectories/conversations/jsons/{run_id}.json")
-    print(f"ID {run_id}: {conversation_history[-1]}")
+    # print(f"ID {run_id}: {conversation_history[-1]}")
     update_status_csv(run_id)
 if __name__ == "__main__":
     kickoff_conversation(1)

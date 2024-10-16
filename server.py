@@ -18,7 +18,7 @@ from RAG_Engine.contextual_retriever import closest_matching_documents
 
 app = RealtimeServer().get_app()
 
-print(os.getenv("OPENAI_API_KEY"))
+# print(os.getenv("OPENAI_API_KEY"))
 # if "OPENAI_API_KEY" in os.environ: 
 #     del os.environ["OPENAI_API_KEY"]
 

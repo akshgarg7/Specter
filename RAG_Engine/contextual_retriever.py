@@ -65,12 +65,12 @@ class ContextualRetrieval:
         for chunk in chunks:
             chunk.metadata["document_name"] = document_name
         end_time = time.time()
-        print(f"Time taken to split document into chunks: {end_time - start_time} seconds")
+        # print(f"Time taken to split document into chunks: {end_time - start_time} seconds")
 
         start_time = time.time()
         contextualized_chunks = self._generate_contextualized_chunks(document, chunks)
         end_time = time.time()
-        print(f"Time taken to generate contextualized chunks: {end_time - start_time} seconds")
+        # print(f"Time taken to generate contextualized chunks: {end_time - start_time} seconds")
         return chunks, contextualized_chunks
 
     def _generate_contextualized_chunks(self, document: str, chunks: List[Document], parallel_processes: int = 20) -> List[Document]:
