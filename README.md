@@ -13,7 +13,10 @@ At a high level, it involves three steps:
 
 ## RAG Engine
    - Our RAG Engine uses a **contextual summary** approach pioneered by Anthropic, which allows for more efficient and accurate extraction of legal precedents, outcomes, strategies, and tactics relevant to the current negotiation. 
-   - All information is stored in a pinecone vector database. The allows easy retrieval of facts about the case. This approach ensures that the AI persona is well-informed and capable of simulating realistic negotiation scenarios. 
+   - All information is stored in a pinecone vector database. The allows easy retrieval of facts about the case. This approach ensures that the AI persona is well-informed and capable of simulating realistic negotiation scenarios.
+
+ ![image](https://github.com/user-attachments/assets/24abc685-d8b9-4bf7-b5a9-0c9336a0720a)
+
 
 ## Simulation Infrastructure
    - **Agent 1 vs. Agent 2 Dynamics:** Two agents, one representing each party (company 1 and company 2), simulate a wide range of potential negotiation pathways (trajectories). Each agent leverages the retrieved case information and applies different negotiation strategies to explore possible outcomes.
