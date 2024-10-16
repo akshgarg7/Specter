@@ -1,5 +1,9 @@
-import { SpecterUi } from "@/components/specter-ui"
+// app/page.tsx
+'use client';
 
-export default function Page() {
-  return <SpecterUi />
+import React from 'react';
+import DefaultPage from '../components/default-page';
+
+export default function Home() {
+  return <DefaultPage />;
 }

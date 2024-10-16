@@ -1,10 +1,11 @@
 'use client'
 
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
-import { UploadCloud, FileText, MessageSquare, GitBranch } from "lucide-react"
-import DefaultPage from "./default-page"
-import RunsPage from "./runs-page"
-import ViewRunsPage from "./view-runs-page"
+import React from 'react';
+import Link from 'next/link';
+import { UploadCloud, FileText, MessageSquare, GitBranch } from 'lucide-react';
+import DefaultPage from './default-page';
+import RunsPage from './runs-page';
+import ViewRunsPage from './view-runs-page';
 
 export function SpecterUi() {
     const handlePracticeClick = () => {
